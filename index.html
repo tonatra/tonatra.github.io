@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIGIA — Mapa de denúncias</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto;background:#0b1222;color:#e5e7eb}
+    header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #11182766;background:#0b1222;position:sticky;top:0}
+    .right a{color:#cbd5e1;text-decoration:none;border:1px solid #ffffff22;padding:6px 10px;border-radius:10px;margin-left:8px}
+    .wrap{display:grid;grid-template-columns:360px 1fr;gap:10px;padding:10px}
+    .card{background:#0a0f1a;border:1px solid #ffffff22;border-radius:12px;padding:12px}
+    label{font-size:12px;color:#94a3b8;display:block;margin:8px 0 4px}
+    input,select,textarea{width:100%;background:#0b0f19;border:1px solid #1f2937;color:#e5e7eb;border-radius:10px;padding:10px}
+    button{background:#22c55e;border:none;color:#fff;padding:10px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+    #map{height:70vh;border-radius:12px;border:1px solid #1f2937}
+    .item{background:#0b0f19;border:1px solid #1f2937;border-radius:10px;padding:8px;margin-top:6px}
+    .pill{display:inline-block;background:#111827;border:1px solid #1f2937;border-radius:999px;padding:2px 8px;font-size:12px}
+    @media(max-width:1000px){.wrap{grid-template-columns:1fr} #map{height:60vh}}
+  </style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0;font-size:18px">VIGIA — Vigilância Inteligente de Gestão de Infraestrutura e Alertas</h1>
+  <div class="right">
+    <a href="./vigia_admin.html">Minha conta</a>
+    <a href="./ai_demo.html">Demonstração da IA</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2 style="margin:0 0 6px 0">Registrar problema</h2>
+
+    <label>Tipo</label>
+    <select id="tipo">
+      <option value="agua">Falta de água</option>
+      <option value="esgoto">Esgoto</option>
+      <option value="luz">Energia</option>
+      <option value="buraco">Buraco</option>
+      <option value="alagamento">Alagamento</option>
+      <option value="outro">Outro</option>
+    </select>
+
+    <label>Autor (opcional)</label>
+    <input id="autor" placeholder="Seu nome ou 'Anônimo'">
+
+    <label>Descrição</label>
+    <textarea id="descricao" placeholder="Explique o problema"></textarea>
+
+    <label>Localização</label>
+    <div style="display:flex;gap:6px">
+      <input id="latlng" placeholder="-20.3155, -40.3128" style="flex:1">
+      <button id="geo" type="button" style="background:#475569">Minha localização</button>
+    </div>
+
+    <label>Pessoas afetadas</label>
+    <div style="display:flex;gap:6px">
+      <input id="reach" type="number" value="50" min="1" style="flex:1">
+      <button id="btnEstimarReach" type="button" style="background:#64748b">Estimar (IA)</button>
+    </div>
+
+    <label>Foto (opcional)</label>
+    <input id="foto" type="file" accept="image/*">
+
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button id="btnRegistrar" type="button">Adicionar</button>
+      <button id="btnClear" type="button" style="background:#334155">Limpar tudo</button>
+    </div>
+
+    <div style="margin-top:10px">
+      <label>Filtros</label>
+      <div style="display:flex;gap:8px">
+        <select id="filtroTipo" style="flex:1">
+          <option value="todos">Todos</option>
+          <option value="agua">Água</option>
+          <option value="esgoto">Esgoto</option>
+          <option value="luz">Energia</option>
+          <option value="buraco">Buraco</option>
+          <option value="alagamento">Alagamento</option>
+          <option value="outro">Outro</option>
+        </select>
+        <input id="filtroIIR" type="number" min="0" max="100" value="0" placeholder="IIR mínimo">
+      </div>
+    </div>
+
+    <div id="listaCasos" style="margin-top:8px"></div>
+  </div>
+  <div id="map" class="card"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="./app.js"></script>
+<script>
+// SW opcional
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

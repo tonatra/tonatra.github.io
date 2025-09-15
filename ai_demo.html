@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIGIA — Demonstração da IA</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:#0b1222;color:#e5e7eb}
+    header{padding:10px 14px;border-bottom:1px solid #11182766;background:#0b1222;position:sticky;top:0}
+    .wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+    .card{background:#0a0f1a;border:1px solid #ffffff22;border-radius:12px;padding:12px}
+    textarea,input,select{width:100%;background:#0b0f19;border:1px solid #1f2937;color:#e5e7eb;border-radius:10px;padding:10px}
+    button{background:#22c55e;border:none;color:#fff;padding:10px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+    pre{white-space:pre-wrap;background:#0b0f19;border:1px solid #1f2937;border-radius:10px;padding:10px}
+    @media(max-width:1000px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header><h1 style="margin:0;font-size:18px">Demonstração da IA — Classificação, Deduplicação e IIR</h1></header>
+
+<div class="wrap">
+  <div class="card">
+    <h2 style="margin:0 0 8px 0">Classificação do tipo</h2>
+    <textarea id="txt" rows="6" placeholder="Descreva o problema... Ex.: Sem água há 3 dias na minha rua, próximo à escola."></textarea>
+    <button id="btnClass">Classificar</button>
+    <pre id="outClass"></pre>
+  </div>
+
+  <div class="card">
+    <h2 style="margin:0 0 8px 0">IIR (Índice de Insatisfação e Relevância)</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <input id="days" type="number" placeholder="Dias sem solução (ex.: 7)" />
+      <input id="reach" type="number" placeholder="Pessoas afetadas (ex.: 120)" />
+    </div>
+    <textarea id="txtIIR" rows="4" placeholder="Descrição (palavras como 'escola' aumentam severidade)"></textarea>
+    <button id="btnIIR">Calcular IIR</button>
+    <pre id="outIIR"></pre>
+  </div>
+
+  <div class="card" style="grid-column:1/-1">
+    <h2 style="margin:0 0 8px 0">Deduplicação (detectar se casos são o mesmo)</h2>
+    <textarea id="a" rows="3" placeholder="Caso A: 'Falta de água no bairro X há 5 dias'"></textarea>
+    <textarea id="b" rows="3" placeholder="Caso B: 'Sem abastecimento de água na região X, já faz quase uma semana'"></textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+      <input id="alat" placeholder="Lat A" /><input id="alon" placeholder="Lng A" />
+      <input id="blat" placeholder="Lat B" /><input id="blon" placeholder="Lng B" />
+    </div>
+    <button id="btnDup">Checar duplicidade</button>
+    <pre id="outDup"></pre>
+  </div>
+</div>
+
+<script src="./ai_demo.js"></script>
+</body>
+</html>
