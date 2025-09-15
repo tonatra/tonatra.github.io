@@ -1,0 +1,102 @@
+[
+  {
+    "id": "den1",
+    "tipo": "esgoto",
+    "titulo": "Esgoto a céu aberto na Rua São João",
+    "descricao": "Rede de esgoto rompida há semanas, libera mau cheiro constante.",
+    "lat": -20.318,
+    "lng": -40.3285,
+    "reach": 30,
+    "createdAt": "2025-09-01T08:00:00Z"
+  },
+  {
+    "id": "den2",
+    "tipo": "agua",
+    "titulo": "Falta de água no bairro República",
+    "descricao": "Muitos dias sem abastecimento regular de água.",
+    "lat": -20.3012,
+    "lng": -40.2958,
+    "reach": 200,
+    "createdAt": "2025-09-05T14:30:00Z"
+  },
+  {
+    "id": "den3",
+    "tipo": "luz",
+    "titulo": "Várias quedas de energia no bairro Jardim da Penha",
+    "descricao": "Cortes de energia 3–4 vezes por semana.",
+    "lat": -20.3075,
+    "lng": -40.3002,
+    "reach": 150,
+    "createdAt": "2025-09-03T20:15:00Z"
+  },
+  {
+    "id": "den4",
+    "tipo": "buraco",
+    "titulo": "Buraco enorme na Avenida Dante Michelini",
+    "descricao": "Buraco crescente que ameaça pneus e pedestres.",
+    "lat": -20.3105,
+    "lng": -40.325,
+    "reach": 20,
+    "createdAt": "2025-09-06T09:45:00Z"
+  },
+  {
+    "id": "den5",
+    "tipo": "alagamento",
+    "titulo": "Alagamento frequente na Rua Joaquim Lírio",
+    "descricao": "Água acumula após chuvas leves, impede passagem de carros.",
+    "lat": -20.3155,
+    "lng": -40.3128,
+    "reach": 80,
+    "createdAt": "2025-09-04T07:20:00Z"
+  },
+  {
+    "id": "den6",
+    "tipo": "agua",
+    "titulo": "Água com terra no bairro Novo Israel",
+    "descricao": "Água chega barrenta e com gosto ruim nas torneiras.",
+    "lat": -20.327,
+    "lng": -40.295,
+    "reach": 120,
+    "createdAt": "2025-09-02T18:00:00Z"
+  },
+  {
+    "id": "den7",
+    "tipo": "esgoto",
+    "titulo": "Esgoto vazando próximo ao colégio estadual",
+    "descricao": "Vazamento na rede fétida que interfere no acesso dos alunos.",
+    "lat": -20.2999,
+    "lng": -40.29,
+    "reach": 60,
+    "createdAt": "2025-09-06T12:00:00Z"
+  },
+  {
+    "id": "den8",
+    "tipo": "luz",
+    "titulo": "Lâmpada queimada na praça do bairro Santa Luíza",
+    "descricao": "No escuro, local fica perigoso à noite.",
+    "lat": -20.32,
+    "lng": -40.31,
+    "reach": 25,
+    "createdAt": "2025-09-05T19:00:00Z"
+  },
+  {
+    "id": "den9",
+    "tipo": "buraco",
+    "titulo": "Pista danificada na Rua Gonzaga",
+    "descricao": "Asfalto solto e crateras pequenas mas frequentes.",
+    "lat": -20.305,
+    "lng": -40.3005,
+    "reach": 35,
+    "createdAt": "2025-09-03T08:30:00Z"
+  },
+  {
+    "id": "den10",
+    "tipo": "outro",
+    "titulo": "Ilha de lixo acumulado na calçada da Rua Solon Borges",
+    "descricao": "Entulho e lixo doméstico impedem passagem de pedestres.",
+    "lat": -20.31,
+    "lng": -40.305,
+    "reach": 10,
+    "createdAt": "2025-09-04T11:45:00Z"
+  }
+]
