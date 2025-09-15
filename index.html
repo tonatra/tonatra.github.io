@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VIGIA — App Público (Mapa + Sessão + IIR)</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1222;--text:#e5e7eb;--muted:#94a3b8;--line:#1f2937;
+          --green:#22c55e;--amber:#f59e0b;--red:#ef4444}
+    html,body{height:100%;margin:0;background:radial-gradient(1200px 800px at 20% -10%, #1e293b, #0b1222 60%, #060912);
+      color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue','Noto Sans',sans-serif}
+    header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #11182766;background:#0b1222aa;backdrop-filter: blur(8px)}
+    header h1{font-size:18px;margin:0}
+    .right{display:flex;gap:10px;align-items:center}
+    .right a{color:#cbd5e1;text-decoration:none;border:1px solid #ffffff22;padding:6px 10px;border-radius:10px}
+    .avatar{width:28px;height:28px;border-radius:50%;background:#111827;border:1px solid #ffffff22;object-fit:cover}
+    #app{display:grid;grid-template-columns:380px 1fr;gap:12px;height:calc(100% - 54px);padding:12px}
+    .card{background:linear-gradient(180deg,#0b1222cc,#0b1222cc), radial-gradient(600px 300px at 20% 0%, #1d283a66, transparent 60%);
+      border:1px solid #ffffff12;border-radius:18px;box-shadow:0 8px 26px #00000055;padding:14px}
+    .card h2{margin:0 0 6px 0;font-size:16px}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input, select, textarea{width:100%;background:#0b0f19;border:1px solid #ffffff14;color:#e5e7eb;border-radius:10px;padding:10px 12px;outline:none;font-size:14px}
+    textarea{min-height:80px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .row3{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+    button{background:linear-gradient(90deg,#22c55e,#16a34a);border:none;color:white;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px #16a34a40}
+    button.secondary{background:linear-gradient(90deg,#475569,#334155);box-shadow:none}
+    .btn-ghost{background:transparent;border:1px solid #ffffff22}
+    #map{width:100%;height:100%;border-radius:18px;border:1px solid #ffffff12;overflow:hidden}
+    .chip{display:inline-flex;gap:6px;align-items:center;background:#334155;color:#cbd5e1;border-radius:999px;padding:4px 8px;font-size:12px;margin-right:6px}
+    .iir{display:flex;gap:10px;align-items:center}
+    .iir .bar{flex:1;height:10px;background:#111827;border-radius:999px;overflow:hidden;border:1px solid #ffffff12}
+    .iir .bar>span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)}
+    .list{display:flex;flex-direction:column;gap:8px;max-height:240px;overflow:auto}
+    .item{background:#0a0f1a;border:1px solid #ffffff12;border-radius:12px;padding:10px}
+    .legend{display:flex;gap:8px;align-items:center}
+    .legend .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .hint{font-size:12px;color:#9ca3af}
+    .footer-note{font-size:11px;color:#9ca3af;text-align:center;margin-top:8px}
+    .backdrop{position:fixed;inset:0;background:#00000088;display:none;align-items:center;justify-content:center;z-index:2000}
+    .modal{width:min(760px,94vw);background:#0a0f1a;border:1px solid #ffffff22;border-radius:16px;box-shadow:0 20px 60px #00000088;padding:14px}
+    .modal h3{margin:0 0 8px 0}
+    .grid2{display:grid;grid-template-columns:180px 1fr;gap:12px}
+    .center{display:flex;align-items:center;justify-content:center}
+    .avatar-lg{width:120px;height:120px;border-radius:50%;border:1px solid #ffffff22;object-fit:cover;background:#0b1222}
+    .pill{padding:2px 8px;border-radius:999px;background:#ffffff14;color:#e5e7eb;font-size:12px;display:inline-block}
+    .popup{font-size:13px}
+    .link{color:#93c5fd;cursor:pointer;text-decoration:underline}
+    .sticky{display:flex;gap:8px;position:sticky;bottom:0;padding-top:10px;background:linear-gradient(180deg,transparent,#0b1222cc 40%)}
+    @media (max-width: 980px){ #app{grid-template-columns:1fr; height:auto} #map{height:60vh} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>VIGIA — Vigilância Inteligente de Gestão de Infraestrutura e Alertas</h1>
+    <div class="right">
+      <a href="vigia_admin.html" title="Abrir painel Minha Conta">Minha conta</a>
+      <img id="navAvatar" class="avatar" alt="Avatar" />
+      <button id="btnLogin" class="secondary">Entrar</button>
+      <button id="btnLogout" class="btn-ghost" style="display:none">Sair</button>
+    </div>
+  </header>
+
+  <div id="app">
+    <div id="left">
+      <div class="card">
+        <h2>Registrar novo problema</h2>
+        <div class="row">
+          <div>
+            <label>Tipo</label>
+            <select id="tipo">
+              <option value="agua">Falta de água</option>
+              <option value="esgoto">Esgoto a céu aberto</option>
+              <option value="luz">Queda de energia</option>
+              <option value="buraco">Buraco na via</option>
+              <option value="alagamento">Alagamento</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div>
+            <label>Nome (aparece como autor)</label>
+            <input id="autor" placeholder="Seu primeiro nome" />
+          </div>
+        </div>
+        <label>Descrição</label>
+        <textarea id="descricao" placeholder="Explique o que está acontecendo, há quanto tempo e quem é impactado."></textarea>
+        <div class="row">
+          <div>
+            <label>Localização</label>
+            <div style="display:flex;gap:8px">
+              <input id="latlng" placeholder="Clique no mapa ou use 'Minha localização'" />
+              <button id="geo" class="secondary" type="button">Minha localização</button>
+            </div>
+            <div class="hint">Dica: clique no mapa para preencher latitude/longitude.</div>
+          </div>
+          <div>
+            <label>Pessoas afetadas (estimativa)</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="reach" type="number" min="1" max="100000" value="50">
+              <label style="display:flex;gap:6px;align-items:center"><input id="reachUnknown" type="checkbox"> <span>Não sei informar</span></label>
+              <button id="btnEstimar" class="secondary" type="button">Estimar (IA)</button>
+            </div>
+            <div class="hint">Se marcado, a IA tenta estimar por dados da web; se não funcionar, usa um modelo local (demo).</div>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Imagem (opcional)</label>
+            <input id="foto" type="file" accept="image/*" />
+            <div class="hint">Protótipo: a imagem é salva localmente (base64) no seu navegador.</div>
+          </div>
+          <div class="center">
+            <img id="preview" class="avatar-lg" alt="Prévia" />
+          </div>
+        </div>
+        <div class="sticky">
+          <button id="btnRegistrar" type="button">Registrar</button>
+          <button id="btnLimpar" class="btn-ghost" type="button">Limpar</button>
+        </div>
+        <div class="footer-note">Protótipo local. Não use dados reais. Tudo fica no <b>localStorage</b>.</div>
+      </div>
+
+      <div class="card">
+        <h2>Filtros</h2>
+        <div class="row">
+          <div>
+            <label>Tipo</label>
+            <select id="filtroTipo">
+              <option value="todos">Todos</option>
+              <option value="agua">Falta de água</option>
+              <option value="esgoto">Esgoto</option>
+              <option value="luz">Energia</option>
+              <option value="buraco">Buraco</option>
+              <option value="alagamento">Alagamento</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div>
+            <label>IIR mínimo (%)</label>
+            <input id="filtroIIR" type="number" min="0" max="100" value="0">
+          </div>
+        </div>
+        <div style="margin-top:8px" class="legend">
+          <span class="dot" style="background:#22c55e"></span><small class="muted">baixo</small>
+          <span class="dot" style="background:#f59e0b"></span><small class="muted">médio</small>
+          <span class="dot" style="background:#ef4444"></span><small class="muted">alto</small>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Casos (resumo)</h2>
+        <div class="list" id="listaCasos"></div>
+      </div>
+    </div>
+
+    <div id="map" class="card"></div>
+  </div>
+
+  <!-- Modais -->
+  <div class="backdrop" id="backdropAuth"></div>
+  <div class="backdrop" id="backdropDup"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+      });
+    }
+  </script>
+</body>
+</html>
